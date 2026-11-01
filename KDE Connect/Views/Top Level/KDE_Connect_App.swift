@@ -80,6 +80,10 @@ import SwiftUI
                     .publisher(for: UIApplication
                         .didEnterBackgroundNotification)
                 ) { _ in
+                    if #available(iOS 26.0, *), BackgroundAvailability.shared.isRunning {
+                        // Stops discovery itself when it ends
+                        return
+                    }
                     // Aggressively terminate the socket is the best way
                     // to prevent weird broken pipe/invalid socket issue
                     backgroundService.stopDiscovery()

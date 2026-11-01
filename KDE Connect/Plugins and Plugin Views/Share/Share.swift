@@ -164,6 +164,11 @@ extension Notification.Name {
     }
     
     @objc func prepAndInitFileSend(fileURLs: [URL]) {
+#if !os(macOS)
+        if #available(iOS 26.0, *) {
+            BackgroundAvailability.shared.coverFileTransfer()
+        }
+#endif
         let isVacant = totalNumOfFilesToSend == 0
         
         var newFiles = [FileTransferItemInfo]()

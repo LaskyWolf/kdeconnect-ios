@@ -69,7 +69,11 @@ struct DevicesView: View {
                     } label: {
                         Label("Configure Devices By IP", systemImage: "network")
                     }
-                    
+
+                    if #available(iOS 26.0, *) {
+                        StayAvailableMenuItem()
+                    }
+
                     // TODO: Implement trusted networks, possibly need entitlement to access LAN information
                     // Label("Configure Trusted Networks", systemName: "lock.shield")
                 } label: {

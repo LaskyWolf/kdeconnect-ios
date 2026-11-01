@@ -25,6 +25,7 @@
 		53A0A1D6283ED49E00C7C473 /* Device+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A0A1D5283ED49E00C7C473 /* Device+Extensions.swift */; };
 		53A0A1D8283ED55200C7C473 /* KeyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A0A1D7283ED55200C7C473 /* KeyEvent.swift */; };
 		53A0A1DA283ED59100C7C473 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A0A1D9283ED59100C7C473 /* Date+Extensions.swift */; };
+		BA5EBA5E2F00000000000002 /* BackgroundAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5EBA5E2F00000000000001 /* BackgroundAvailability.swift */; };
 		53A0A1DC283ED5C400C7C473 /* BackgroundService+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A0A1DB283ED5C400C7C473 /* BackgroundService+Extensions.swift */; };
 		53A0A1DE283ED78700C7C473 /* LocalizedStringKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A0A1DD283ED78700C7C473 /* LocalizedStringKey+Extensions.swift */; };
 		53A92E6D27ED4F4F0085A10C /* SystemSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A92E6C27ED4F4F0085A10C /* SystemSound.swift */; };
@@ -171,6 +172,7 @@
 		53A0A1D5283ED49E00C7C473 /* Device+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Device+Extensions.swift"; sourceTree = "<group>"; };
 		53A0A1D7283ED55200C7C473 /* KeyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEvent.swift; sourceTree = "<group>"; };
 		53A0A1D9283ED59100C7C473 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		BA5EBA5E2F00000000000001 /* BackgroundAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundAvailability.swift; sourceTree = "<group>"; };
 		53A0A1DB283ED5C400C7C473 /* BackgroundService+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackgroundService+Extensions.swift"; sourceTree = "<group>"; };
 		53A0A1DD283ED78700C7C473 /* LocalizedStringKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalizedStringKey+Extensions.swift"; sourceTree = "<group>"; };
 		53A92E6C27ED4F4F0085A10C /* SystemSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSound.swift; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 				53A0A1D5283ED49E00C7C473 /* Device+Extensions.swift */,
 				53A0A1D7283ED55200C7C473 /* KeyEvent.swift */,
 				53A0A1D9283ED59100C7C473 /* Date+Extensions.swift */,
+				BA5EBA5E2F00000000000001 /* BackgroundAvailability.swift */,
 				53A0A1DB283ED5C400C7C473 /* BackgroundService+Extensions.swift */,
 				53A0A1DD283ED78700C7C473 /* LocalizedStringKey+Extensions.swift */,
 				D20ABB0A29A4A04E006F277B /* FileTransferItem.swift */,
@@ -856,6 +859,7 @@
 				53A0A1DE283ED78700C7C473 /* LocalizedStringKey+Extensions.swift in Sources */,
 				D24FFB4F29E7854000604DA4 /* OpenReceivedDocumentsFolderButton.swift in Sources */,
 				D27D727F29B051D8002C00B7 /* NetworkChangeMonitor.swift in Sources */,
+				BA5EBA5E2F00000000000002 /* BackgroundAvailability.swift in Sources */,
 				53A0A1DC283ED5C400C7C473 /* BackgroundService+Extensions.swift in Sources */,
 				D28C94CE27D1CDB6002EBC2D /* OSLogEntryLogView.swift in Sources */,
 				1499A8E72698BFF300FDF493 /* Device.m in Sources */,
