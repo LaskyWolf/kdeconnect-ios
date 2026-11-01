@@ -16,7 +16,7 @@ jobs:
             -project 'KDE Connect.xcodeproj' \
             -scheme 'KDE Connect' \
             -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
-            -only-testing:'KDE Connect Tests' \
+            -only-testing:'KDE ConnectTests' \
             -skipPackagePluginValidation -skipMacroValidation \
             CODE_SIGNING_ALLOWED=NO
 
