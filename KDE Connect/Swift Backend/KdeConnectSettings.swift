@@ -55,8 +55,8 @@ class KdeConnectSettings: NSObject, ObservableObject {
     @objc
     static func getUUID() -> String {
         if cachedUuid == nil {
-            let group = "5433B4KXM8.org.kde.kdeconnect"
-            let wrapper = KeychainItemWrapper(identifier: "org.kde.kdeconnect-ios", accessGroup: group)!
+            // nil is the app's first keychain access group, which depends on who signed the app
+            let wrapper = KeychainItemWrapper(identifier: "org.kde.kdeconnect-ios", accessGroup: nil)!
             if let savedUUID = wrapper.object(forKey: kSecValueData as String) as? String, !savedUUID.isEmpty {
                 cachedUuid = savedUUID
             } else {
