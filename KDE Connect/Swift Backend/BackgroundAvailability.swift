@@ -311,6 +311,21 @@ struct StayAvailableMenuItem: View {
     }
 }
 
+/// Lets the Shortcuts app, Control Center and the Action Button start or stop staying available.
+@available(iOS 26.0, *)
+struct ToggleStayAvailableIntent: AppIntent {
+    static let title: LocalizedStringResource = "Toggle Stay Available"
+    static let description = IntentDescription("Keeps KDE Connect reachable for 15 minutes after you leave the app, or stops doing so.")
+    /// iOS only starts the background session while the app is in the foreground.
+    static let openAppWhenRun = true
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        BackgroundAvailability.shared.toggleFromIntent()
+        return .result()
+    }
+}
+
 @available(iOS 26.0, *)
 struct KDEConnectShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {

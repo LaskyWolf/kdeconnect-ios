@@ -101,10 +101,6 @@
 		D2F7776627C99760008F20A1 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F7776427C9970E008F20A1 /* SnapshotHelper.swift */; };
 		D2FAF12727D2E78900658753 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = D2FAF12627D2E78900658753 /* Introspect */; };
 		D2FBA1F9277179A300EBA686 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = D2FBA1F8277179A300EBA686 /* CocoaAsyncSocket */; };
-		C0A7801E2F00000000000002 /* ToggleStayAvailableIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A7801E2F00000000000001 /* ToggleStayAvailableIntent.swift */; };
-		C0A7801E2F00000000000003 /* ToggleStayAvailableIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A7801E2F00000000000001 /* ToggleStayAvailableIntent.swift */; };
-		C0A7801E2F00000000000005 /* StayAvailableControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A7801E2F00000000000004 /* StayAvailableControl.swift */; };
-		C0A7801E2F00000000000008 /* KDE Connect Controls.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C0A7801E2F00000000000007 /* KDE Connect Controls.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,28 +118,7 @@
 			remoteGlobalIDString = A0A0442B267BF38700CC21DD;
 			remoteInfo = "KDE Connect Test";
 		};
-		C0A7801E2F0000000000000A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A0A04424267BF38700CC21DD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C0A7801E2F0000000000000F;
-			remoteInfo = "KDE Connect Controls";
-		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		C0A7801E2F00000000000009 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				C0A7801E2F00000000000008 /* KDE Connect Controls.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1499A8D02698BF0F00FDF493 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
@@ -282,10 +257,6 @@
 		D2E60C4029FDB06000502F07 /* SetupFileTransfersForUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupFileTransfersForUITests.swift; sourceTree = "<group>"; };
 		D2F7776427C9970E008F20A1 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		D2F7776727C99901008F20A1 /* fastlane */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fastlane; sourceTree = "<group>"; };
-		C0A7801E2F00000000000001 /* ToggleStayAvailableIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleStayAvailableIntent.swift; sourceTree = "<group>"; };
-		C0A7801E2F00000000000004 /* StayAvailableControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayAvailableControl.swift; sourceTree = "<group>"; };
-		C0A7801E2F00000000000006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C0A7801E2F00000000000007 /* KDE Connect Controls.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "KDE Connect Controls.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -315,13 +286,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A0A04445267BF38A00CC21DD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C0A7801E2F0000000000000D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -427,7 +391,6 @@
 			isa = PBXGroup;
 			children = (
 				A0A0442E267BF38700CC21DD /* KDE Connect */,
-				C0A7801E2F00000000000010 /* KDE Connect Controls */,
 				A0A04440267BF38A00CC21DD /* KDE Connect Tests */,
 				A0A0444B267BF38A00CC21DD /* KDE Connect UITests */,
 				D2F7776727C99901008F20A1 /* fastlane */,
@@ -440,7 +403,6 @@
 			isa = PBXGroup;
 			children = (
 				A0A0442C267BF38700CC21DD /* KDE Connect.app */,
-				C0A7801E2F00000000000007 /* KDE Connect Controls.appex */,
 				A0A0443D267BF38A00CC21DD /* KDE ConnectTests.xctest */,
 				A0A04448267BF38A00CC21DD /* KDE ConnectUITests.xctest */,
 			);
@@ -510,7 +472,6 @@
 				53A0A1D7283ED55200C7C473 /* KeyEvent.swift */,
 				53A0A1D9283ED59100C7C473 /* Date+Extensions.swift */,
 				BA5EBA5E2F00000000000001 /* BackgroundAvailability.swift */,
-				C0A7801E2F00000000000001 /* ToggleStayAvailableIntent.swift */,
 				53A0A1DB283ED5C400C7C473 /* BackgroundService+Extensions.swift */,
 				53A0A1DD283ED78700C7C473 /* LocalizedStringKey+Extensions.swift */,
 				D20ABB0A29A4A04E006F277B /* FileTransferItem.swift */,
@@ -717,15 +678,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C0A7801E2F00000000000010 /* KDE Connect Controls */ = {
-			isa = PBXGroup;
-			children = (
-				C0A7801E2F00000000000004 /* StayAvailableControl.swift */,
-				C0A7801E2F00000000000006 /* Info.plist */,
-			);
-			path = "KDE Connect Controls";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -736,13 +688,11 @@
 				A0A04428267BF38700CC21DD /* Sources */,
 				A0A04429267BF38700CC21DD /* Frameworks */,
 				A0A0442A267BF38700CC21DD /* Resources */,
-				C0A7801E2F00000000000009 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				D2AB56782988E4B9008A2217 /* PBXTargetDependency */,
-				C0A7801E2F0000000000000B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				5E1BB96C2D1B92AC0024F3FF /* Mac */,
@@ -797,23 +747,6 @@
 			productReference = A0A04448267BF38A00CC21DD /* KDE ConnectUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		C0A7801E2F0000000000000F /* KDE Connect Controls */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C0A7801E2F00000000000011 /* Build configuration list for PBXNativeTarget "KDE Connect Controls" */;
-			buildPhases = (
-				C0A7801E2F0000000000000C /* Sources */,
-				C0A7801E2F0000000000000D /* Frameworks */,
-				C0A7801E2F0000000000000E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "KDE Connect Controls";
-			productName = "KDE Connect Controls";
-			productReference = C0A7801E2F00000000000007 /* KDE Connect Controls.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -827,9 +760,6 @@
 					A0A0442B267BF38700CC21DD = {
 						CreatedOnToolsVersion = 12.5;
 						LastSwiftMigration = 1250;
-					};
-					C0A7801E2F0000000000000F = {
-						CreatedOnToolsVersion = 26.0;
 					};
 					A0A0443C267BF38A00CC21DD = {
 						CreatedOnToolsVersion = 12.5;
@@ -877,7 +807,6 @@
 			projectRoot = "";
 			targets = (
 				A0A0442B267BF38700CC21DD /* KDE Connect */,
-				C0A7801E2F0000000000000F /* KDE Connect Controls */,
 				A0A0443C267BF38A00CC21DD /* KDE ConnectTests */,
 				A0A04447267BF38A00CC21DD /* KDE ConnectUITests */,
 			);
@@ -911,13 +840,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C0A7801E2F0000000000000E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -938,7 +860,6 @@
 				D24FFB4F29E7854000604DA4 /* OpenReceivedDocumentsFolderButton.swift in Sources */,
 				D27D727F29B051D8002C00B7 /* NetworkChangeMonitor.swift in Sources */,
 				BA5EBA5E2F00000000000002 /* BackgroundAvailability.swift in Sources */,
-				C0A7801E2F00000000000002 /* ToggleStayAvailableIntent.swift in Sources */,
 				53A0A1DC283ED5C400C7C473 /* BackgroundService+Extensions.swift in Sources */,
 				D28C94CE27D1CDB6002EBC2D /* OSLogEntryLogView.swift in Sources */,
 				1499A8E72698BFF300FDF493 /* Device.m in Sources */,
@@ -1027,15 +948,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C0A7801E2F0000000000000C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C0A7801E2F00000000000005 /* StayAvailableControl.swift in Sources */,
-				C0A7801E2F00000000000003 /* ToggleStayAvailableIntent.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1052,12 +964,6 @@
 		D2AB56782988E4B9008A2217 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = D2AB56772988E4B9008A2217 /* SwiftLintPlugin */;
-		};
-		C0A7801E2F0000000000000B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilter = ios;
-			target = C0A7801E2F0000000000000F /* KDE Connect Controls */;
-			targetProxy = C0A7801E2F0000000000000A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1390,64 +1296,6 @@
 			};
 			name = Release;
 		};
-		C0A7801E2F00000000000012 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5433B4KXM8;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "KDE Connect Controls/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "KDE Connect";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.5.7;
-				PRODUCT_BUNDLE_IDENTIFIER = org.kde.kdeconnect.controls;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) STAY_AVAILABLE_CONTROL";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		C0A7801E2F00000000000013 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5433B4KXM8;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "KDE Connect Controls/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "KDE Connect";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.5.7;
-				PRODUCT_BUNDLE_IDENTIFIER = org.kde.kdeconnect.controls;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) STAY_AVAILABLE_CONTROL";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1483,15 +1331,6 @@
 			buildConfigurations = (
 				A0A04458267BF38A00CC21DD /* Debug */,
 				A0A04459267BF38A00CC21DD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C0A7801E2F00000000000011 /* Build configuration list for PBXNativeTarget "KDE Connect Controls" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C0A7801E2F00000000000012 /* Debug */,
-				C0A7801E2F00000000000013 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
