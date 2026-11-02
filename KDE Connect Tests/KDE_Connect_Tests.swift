@@ -61,6 +61,22 @@ class KDE_Connect_Tests: XCTestCase {
     }
 
 #if !os(macOS)
+    func testLiveActivityStatusShowsConnectionTimeAndLatestFile() {
+        let waiting = BackgroundAvailabilityStatus(connectedDevices: ["Wolfpad"],
+                                                   step: .waiting(remaining: 61),
+                                                   latestFile: "photo.jpg")
+        XCTAssertEqual(waiting.title, "Connected to Wolfpad")
+        XCTAssertEqual(waiting.subtitle, "2 min left · Latest: photo.jpg")
+
+        let transfer = TransferProgress(totalFiles: 3, finishedFiles: 1)
+        let sending = BackgroundAvailabilityStatus(connectedDevices: [], step: .transferring(transfer), latestFile: nil)
+        XCTAssertEqual(sending.title, "Waiting for a device")
+        XCTAssertEqual(sending.subtitle, "File 2 of 3")
+
+        let many = BackgroundAvailabilityStatus(connectedDevices: ["A", "B"], step: .finished, latestFile: nil)
+        XCTAssertEqual(many.title, "Connected to 2 devices")
+    }
+
     func testEveryAppIconHasAPreviewImage() {
         for icon in AppIcon.allCases {
             XCTAssertNotNil(UIImage(named: icon.previewImageName, in: Bundle(for: Share.self), with: nil),

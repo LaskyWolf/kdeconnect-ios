@@ -66,6 +66,21 @@ import SwiftUI
                     motionManager.gyroUpdateInterval = 0.025
                     
                     UIApplication.shared.isIdleTimerDisabled = true
+                    if #available(iOS 26.0, *) {
+                        BackgroundAvailability.shared.startToggleIfActive()
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    if #available(iOS 26.0, *) {
+                        BackgroundAvailability.shared.startToggleIfActive()
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .backgroundAvailabilityFailedToStart)) { _ in
+                    alertManager.queueAlert(prioritize: true, title: "Can't Stay Available") {
+                        Text("iOS didn't allow KDE Connect to keep running in the background. Keep the app open to receive files, or try again later.")
+                    } buttons: {
+                        Button("OK") {}
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // In case the app's been chilling suspended for a long time,

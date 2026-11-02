@@ -95,6 +95,11 @@ extension Notification.Name {
                         logger.debug("File \(filename, privacy: .private(mask: .hash)) saved successfully")
 #if !os(macOS)
                         await notificationHapticsGenerator.notificationOccurred(.success)
+                        if #available(iOS 26.0, *) {
+                            await MainActor.run {
+                                BackgroundAvailability.shared.noteFileReceived(filename)
+                            }
+                        }
 #endif
                     } catch {
                         logger.fault("File \(filename, privacy: .public) failed to save due to \(error.localizedDescription, privacy: .public)")

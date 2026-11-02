@@ -6,9 +6,14 @@
 
 #if !os(macOS)
 
+import AppIntents
 import BackgroundTasks
 import OSLog
 import SwiftUI
+
+extension Notification.Name {
+    static let backgroundAvailabilityFailedToStart = Notification.Name("backgroundAvailabilityFailedToStart")
+}
 
 /// How far the file transfers of one or more devices have come.
 struct TransferProgress: Equatable {
@@ -73,6 +78,43 @@ enum BackgroundAvailabilityStep: Equatable {
     }
 }
 
+/// The text of the Live Activity.
+struct BackgroundAvailabilityStatus: Equatable {
+    let title: String
+    let subtitle: String
+
+    init(connectedDevices: [String], step: BackgroundAvailabilityStep, latestFile: String?) {
+        switch connectedDevices.count {
+        case 0:
+            title = NSLocalizedString("Waiting for a device", comment: "Live Activity title when no device is connected")
+        case 1:
+            title = String(format: NSLocalizedString("Connected to %@", comment: "Live Activity title with the connected device"),
+                           connectedDevices[0])
+        default:
+            title = String(format: NSLocalizedString("Connected to %d devices", comment: "Live Activity title"),
+                           connectedDevices.count)
+        }
+
+        var parts = [String]()
+        switch step {
+        case .transferring(let progress):
+            parts.append(String(format: NSLocalizedString("File %1$d of %2$d", comment: "Live Activity subtitle during a file transfer"),
+                                min(progress.finishedFiles + 1, progress.totalFiles),
+                                progress.totalFiles))
+        case .waiting(let remaining):
+            parts.append(String(format: NSLocalizedString("%d min left", comment: "Live Activity subtitle while waiting for files"),
+                                Int((remaining / 60).rounded(.up))))
+        case .finished:
+            break
+        }
+        if let latestFile {
+            parts.append(String(format: NSLocalizedString("Latest: %@", comment: "Live Activity subtitle with the last received file"),
+                                latestFile))
+        }
+        subtitle = parts.joined(separator: " · ")
+    }
+}
+
 /// Keeps the app's connections open in the background for a limited time, shown in a Live Activity.
 ///
 /// iOS only runs this for work that a person starts from the foreground and that reports progress:
@@ -93,18 +135,42 @@ final class BackgroundAvailability: ObservableObject {
     private var timer: Timer?
     private var startDate = Date()
     private var duration: TimeInterval = 0
-    private var subtitle = ""
+    private var status: BackgroundAvailabilityStatus?
+    private var latestFile: String?
+    private var isToggleWaitingForForeground = false
     private let logger = Logger()
 
     private init() {}
 
-    /// Starts staying available, returns false if iOS refuses to.
-    func stayAvailable() -> Bool {
+    /// Starts staying available, and tells the person if iOS refuses to.
+    func stayAvailable() {
         startDate = Date()
         duration = Self.stayAvailableDuration
-        let started = isRunning || submit()
-        isStayingAvailable = started
-        return started
+        isStayingAvailable = isRunning || submit()
+        if !isStayingAvailable {
+            NotificationCenter.default.post(name: .backgroundAvailabilityFailedToStart, object: nil)
+        }
+    }
+
+    /// iOS only starts the session from the foreground, which the app may not have reached yet.
+    func toggleFromIntent() {
+        if isStayingAvailable {
+            stopStayingAvailable()
+        } else {
+            isToggleWaitingForForeground = true
+            startToggleIfActive()
+        }
+    }
+
+    func startToggleIfActive() {
+        guard isToggleWaitingForForeground, UIApplication.shared.applicationState == .active else { return }
+        isToggleWaitingForForeground = false
+        stayAvailable()
+    }
+
+    func noteFileReceived(_ filename: String) {
+        latestFile = filename
+        tick()
     }
 
     /// Stops the countdown. Transfers in progress can still finish.
@@ -182,34 +248,29 @@ final class BackgroundAvailability: ObservableObject {
             .compactMap { ($0._plugins[.share] as? Share)?.transferProgress }
             .reduce(TransferProgress(), +)
         let elapsed = Date().timeIntervalSince(startDate)
+        let step = BackgroundAvailabilityStep(transfer: transfer, elapsed: elapsed, duration: duration)
 
-        switch BackgroundAvailabilityStep(transfer: transfer, elapsed: elapsed, duration: duration) {
+        switch step {
         case .transferring(let progress):
             task.progress.totalUnitCount = progress.totalUnits
             task.progress.completedUnitCount = progress.completedUnits
-            updateSubtitle(String(
-                format: NSLocalizedString("Transferring file %1$d of %2$d",
-                                          comment: "Live Activity subtitle during a file transfer"),
-                min(progress.finishedFiles + 1, progress.totalFiles),
-                progress.totalFiles
-            ))
-        case .waiting(let remaining):
+        case .waiting:
             task.progress.totalUnitCount = Int64(duration)
             task.progress.completedUnitCount = Int64(elapsed)
-            updateSubtitle(String(
-                format: NSLocalizedString("Ready to receive files for %d more min",
-                                          comment: "Live Activity subtitle while waiting for files"),
-                Int((remaining / 60).rounded(.up))
-            ))
         case .finished:
             finish(success: true)
+            return
         }
-    }
 
-    private func updateSubtitle(_ newSubtitle: String) {
-        guard newSubtitle != subtitle else { return }
-        subtitle = newSubtitle
-        task?.updateTitle("KDE Connect", subtitle: newSubtitle)
+        let connectedDevices = backgroundService._devices.values
+            .filter { $0.isReachable() && $0.isPaired() }
+            .map { $0._deviceInfo.name }
+            .sorted()
+        let newStatus = BackgroundAvailabilityStatus(connectedDevices: connectedDevices, step: step, latestFile: latestFile)
+        if newStatus != status {
+            status = newStatus
+            task.updateTitle(newStatus.title, subtitle: newStatus.subtitle)
+        }
     }
 
     private func finish(success: Bool) {
@@ -219,7 +280,7 @@ final class BackgroundAvailability: ObservableObject {
         task = nil
         isStarting = false
         duration = 0
-        subtitle = ""
+        status = nil
         isStayingAvailable = false
         if UIApplication.shared.applicationState == .background {
             // The app is about to be suspended, same as when it enters the background normally.
@@ -232,7 +293,6 @@ final class BackgroundAvailability: ObservableObject {
 @available(iOS 26.0, *)
 struct StayAvailableMenuItem: View {
     @ObservedObject private var availability = BackgroundAvailability.shared
-    @EnvironmentObject private var alertManager: AlertManager
 
     var body: some View {
         if availability.isStayingAvailable {
@@ -243,17 +303,38 @@ struct StayAvailableMenuItem: View {
             }
         } else {
             Button {
-                if !availability.stayAvailable() {
-                    alertManager.queueAlert(prioritize: true, title: "Can't Stay Available") {
-                        Text("iOS didn't allow KDE Connect to keep running in the background. Keep the app open to receive files, or try again later.")
-                    } buttons: {
-                        Button("OK") {}
-                    }
-                }
+                availability.stayAvailable()
             } label: {
                 Label("Stay Available for 15 Minutes", systemImage: "antenna.radiowaves.left.and.right")
             }
         }
+    }
+}
+
+/// Lets the Shortcuts app, Control Center and the Action Button start or stop staying available.
+@available(iOS 26.0, *)
+struct ToggleStayAvailableIntent: AppIntent {
+    static let title: LocalizedStringResource = "Toggle Stay Available"
+    static let description = IntentDescription("Keeps KDE Connect reachable for 15 minutes after you leave the app, or stops doing so.")
+    /// iOS only starts the background session while the app is in the foreground.
+    static let openAppWhenRun = true
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        BackgroundAvailability.shared.toggleFromIntent()
+        return .result()
+    }
+}
+
+@available(iOS 26.0, *)
+struct KDEConnectShortcuts: AppShortcutsProvider {
+    static var appShortcuts: [AppShortcut] {
+        AppShortcut(
+            intent: ToggleStayAvailableIntent(),
+            phrases: ["Toggle Stay Available in \(.applicationName)"],
+            shortTitle: "Stay Available",
+            systemImageName: "antenna.radiowaves.left.and.right"
+        )
     }
 }
 
