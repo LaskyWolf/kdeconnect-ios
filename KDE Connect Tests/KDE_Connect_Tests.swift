@@ -26,6 +26,40 @@ class KDE_Connect_Tests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testSocketAddressChangesPortAndKeepsLinkLocalInterface() throws {
+        var original = sockaddr_in6()
+        original.sin6_len = UInt8(MemoryLayout<sockaddr_in6>.size)
+        original.sin6_family = sa_family_t(AF_INET6)
+        original.sin6_port = UInt16(1716).bigEndian
+        original.sin6_scope_id = 7
+        inet_pton(AF_INET6, "fe80::17f0:dc07:67bf:1161", &original.sin6_addr)
+
+        let result = try XCTUnwrap(SocketAddress.address(withUnsafeBytes(of: original) { Data($0) }, withPort: 1739))
+        let changed = result.withUnsafeBytes { $0.load(as: sockaddr_in6.self) }
+        XCTAssertEqual(UInt16(bigEndian: changed.sin6_port), 1739)
+        XCTAssertEqual(changed.sin6_scope_id, 7)
+        XCTAssertEqual(withUnsafeBytes(of: changed.sin6_addr) { Data($0) },
+                       withUnsafeBytes(of: original.sin6_addr) { Data($0) })
+    }
+
+    func testSocketAddressChangesPortOfIPv4() throws {
+        var original = sockaddr_in()
+        original.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        original.sin_family = sa_family_t(AF_INET)
+        original.sin_port = UInt16(1716).bigEndian
+        original.sin_addr.s_addr = inet_addr("192.168.1.27")
+
+        let result = try XCTUnwrap(SocketAddress.address(withUnsafeBytes(of: original) { Data($0) }, withPort: 1739))
+        let changed = result.withUnsafeBytes { $0.load(as: sockaddr_in.self) }
+        XCTAssertEqual(UInt16(bigEndian: changed.sin_port), 1739)
+        XCTAssertEqual(changed.sin_addr.s_addr, original.sin_addr.s_addr)
+    }
+
+    func testSocketAddressRejectsUnusableAddresses() {
+        XCTAssertNil(SocketAddress.address(nil, withPort: 1739))
+        XCTAssertNil(SocketAddress.address(Data([1, 2]), withPort: 1739))
+    }
+
 #if !os(macOS)
     func testEveryAppIconHasAPreviewImage() {
         for icon in AppIcon.allCases {

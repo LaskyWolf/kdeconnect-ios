@@ -14,6 +14,34 @@
 import Foundation
 import CocoaAsyncSocket
 
+@objc(KDESocketAddress)
+@objcMembers
+class SocketAddress: NSObject {
+    /// Returns a copy of `address`, a `sockaddr`, that uses another port and keeps everything else.
+    static func address(_ address: Data?, withPort port: UInt16) -> Data? {
+        guard var result = address else { return nil }
+        let isValid = result.withUnsafeMutableBytes { bytes -> Bool in
+            guard bytes.count >= MemoryLayout<sockaddr>.size else { return false }
+            let portOffset: Int
+            let minimumSize: Int
+            switch Int32(bytes.load(as: sockaddr.self).sa_family) {
+            case AF_INET:
+                portOffset = MemoryLayout<sockaddr_in>.offset(of: \.sin_port)!
+                minimumSize = MemoryLayout<sockaddr_in>.size
+            case AF_INET6:
+                portOffset = MemoryLayout<sockaddr_in6>.offset(of: \.sin6_port)!
+                minimumSize = MemoryLayout<sockaddr_in6>.size
+            default:
+                return false
+            }
+            guard bytes.count >= minimumSize else { return false }
+            bytes.storeBytes(of: port.bigEndian, toByteOffset: portOffset, as: UInt16.self)
+            return true
+        }
+        return isValid ? result : nil
+    }
+}
+
 @objc(KDEFileTransferItem)
 @objcMembers
 class FileTransferItem: NSObject {

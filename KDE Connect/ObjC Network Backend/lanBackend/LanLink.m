@@ -585,7 +585,7 @@
 
 #pragma mark - Receiving Payloads for Share Plugin
 
-- (void)createSocketForReceivingPayloadOfNP:(NetworkPacket *)np incomingFromHost:(NSString *)host {
+- (void)createSocketForReceivingPayloadOfNP:(NetworkPacket *)np incomingFromSocket:(GCDAsyncSocket *)incomingSocket {
     // Create file handle for writing data chunk by chunk to temporary file
     NSError *errorGettingDefaultDestination;
     NSURL *destinationDirectory = [NSURL defaultDestinationDirectoryAndReturnError:&errorGettingDefaultDestination];
@@ -643,8 +643,16 @@
     os_log_with_type(logger, self.debugLogLevel, "Pending payload: size: %ld", [np _PayloadSize]);
     NSError *error = nil;
     uint16_t tcpPort = [[[np payloadTransferInfo] valueForKey:@"port"] unsignedIntValue];
+    // Copy the address instead of using connectedHost, which drops the
+    // network interface that IPv6 link-local addresses can't connect without
+    NSData *address = [KDESocketAddress address:[incomingSocket connectedAddress] withPort:tcpPort];
+    if (address == nil) {
+        error = [NSError errorWithDomain:GCDAsyncSocketErrorDomain
+                                    code:GCDAsyncSocketClosedError
+                                userInfo:nil];
+    }
     // Create new connection here
-    if (![socket connectToHost:host onPort:tcpPort error:&error]){
+    if (address == nil || ![socket connectToAddress:address error:&error]){
         os_log_with_type(logger, OS_LOG_TYPE_FAULT,
                          "Lanlink connect to payload host failed due to %{public}@",
                          error);
@@ -754,7 +762,7 @@
                                forKey:@"filename"];
                     }
                     [self createSocketForReceivingPayloadOfNP:np
-                                             incomingFromHost:[sock connectedHost]];
+                                           incomingFromSocket:sock];
                 } else {
                     [self.linkDelegate onPacketReceived:np];
                 }
