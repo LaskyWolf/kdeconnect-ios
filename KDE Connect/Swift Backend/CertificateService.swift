@@ -21,6 +21,21 @@ import CryptoKit
     override init() {
         (hostIdentity, hostIdentityWasRegenerated) = Self.loadIdentityFromKeychain()
         super.init()
+        Self.allowKeychainAccessWhileLocked()
+    }
+
+    /// New connections read these items in the TLS handshake, which has to work on a locked device
+    /// to receive files in the background. Items become readable from the first unlock after a restart.
+    private static func allowKeychainAccessWhileLocked() {
+#if !os(macOS)
+        for itemClass in [kSecClassKey, kSecClassCertificate] {
+            let status = SecItemUpdate([kSecClass: itemClass] as CFDictionary,
+                                       [kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock] as CFDictionary)
+            if status != errSecSuccess && status != errSecItemNotFound {
+                Logger().error("Failed to change keychain accessibility of \(itemClass): \(status)")
+            }
+        }
+#endif
     }
     
     static func loadIdentityFromKeychain() -> (SecIdentity, Bool) {
@@ -264,6 +279,7 @@ import CryptoKit
             kSecValueRef: cert,
         ] as CFDictionary
         let status: OSStatus = SecItemAdd(keychainItemQuery, nil)
+        Self.allowKeychainAccessWhileLocked()
         return (status == 0)
     }
     
