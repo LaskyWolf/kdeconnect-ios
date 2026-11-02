@@ -70,6 +70,11 @@ import SwiftUI
                         BackgroundAvailability.shared.startToggleIfActive()
                     }
                 }
+                .onOpenURL { url in
+                    if #available(iOS 26.0, *), url == ToggleStayAvailableIntent.url {
+                        BackgroundAvailability.shared.toggleFromIntent()
+                    }
+                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     if #available(iOS 26.0, *) {
                         BackgroundAvailability.shared.startToggleIfActive()
